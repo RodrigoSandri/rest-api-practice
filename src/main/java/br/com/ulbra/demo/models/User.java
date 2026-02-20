@@ -1,97 +1,76 @@
 package br.com.ulbra.demo.models;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import br.com.ulbra.demo.models.enums.ProfileEnum;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users") 
+@Table(name = User.TABLE_NAME)
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class User {
 
-    public interface CreateUser {}
-    public interface UpdateUser {}
+    public static final String TABLE_NAME = "users";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true)
     private Long id;
 
-    @Column(length = 100, nullable = false)
-    @NotNull(groups = CreateUser.class)
-    @NotEmpty(groups = CreateUser.class)
+    @Column(name = "username", length = 100, nullable = false, unique = true)
     @Size(min = 2, max = 100)
-    private String name;
+    @NotBlank
+    private String username;
 
-    @Column(length = 100, nullable = false, unique = true)
-    @NotNull(groups = CreateUser.class)
-    @NotEmpty(groups = CreateUser.class)
-    @Size(min = 5, max = 100)
-    private String email;
-
-    @Column(length = 100, nullable = false)
-    @NotNull(groups = CreateUser.class)
-    @NotEmpty(groups = CreateUser.class)
-    @Size(min = 6, max = 100)
+    @Column(name = "password", length = 60, nullable = false)
+    @JsonProperty(access = Access.WRITE_ONLY)
+    @Size(min = 8, max = 60)
+    @NotBlank
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    @JsonProperty(access = Access.WRITE_ONLY)
     private List<Task> tasks = new ArrayList<>();
 
-    public User() {
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_profile")
+    @Column(name = "profile")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Set<Integer> profiles = new HashSet<>();
+
+    public Set<ProfileEnum> getProfiles() {
+        return this.profiles
+       .stream()
+       .map(ProfileEnum::toEnum)
+       .collect(Collectors.toSet());
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User user)) return false;
-        return Objects.equals(id, user.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public void addProfile(ProfileEnum profileEnum) {
+        this.profiles.add(profileEnum.getCode());
     }
 }
