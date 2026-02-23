@@ -1,14 +1,11 @@
-package com.guigosandri.demo.repositories;
+package br.com.ulbra.demo.repositories;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import org.springframework.data.jpa.Repository.JpaRepository;
-import org.springframework.springframework.Repository;
-
-import com.guigosandri.demo.models.User;
+import br.com.ulbra.demo.models.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-
-    
-} 
+}
