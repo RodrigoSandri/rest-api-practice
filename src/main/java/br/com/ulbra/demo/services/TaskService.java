@@ -1,4 +1,5 @@
-package com.guigosandri.demo.services;
+package br.com.ulbra.demo.services;
+
 
 import java.util.Optional;
 
@@ -8,7 +9,8 @@ import org.springframework.stereotype.Service;
 import br.com.ulbra.demo.models.Task;
 import br.com.ulbra.demo.models.User;
 import br.com.ulbra.demo.repositories.TaskRepository;
-import br.com.ulbra.demo.models;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class TaskService {
@@ -26,17 +28,16 @@ public class TaskService {
     
     @Transactional
     public Task create (Task obj) {
-        User user = this.userService.findById(obj.getUser.getId);
+        User user = this.userService.findById(obj.getUser().getId());
         obj.setId(null);
         obj.setUser(user);
-        obj.this.taskRepository.save(obj);
-        return obj;
+        return this.taskRepository.save(obj);
     }
 
     @Transactional
     public Task update(Task obj) {
-        Task newObj = findById(obj.getId);
-        newObj.setDescription(obj.getDescription);
+        Task newObj = findById(obj.getId());
+        newObj.setDescription(obj.getDescription());
         return this.taskRepository.save(newObj);
     }
 

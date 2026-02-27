@@ -5,10 +5,10 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.Transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.guigosandri.repositories.UserRepository;
-import com.guigosandri.demo.models.User;
+import br.com.ulbra.demo.repositories.UserRepository;
+import br.com.ulbra.demo.models.User;
 
 
 @Service
@@ -28,7 +28,7 @@ public class UserService {
     }
 
     @Transactional
-    public User create(br.com.ulbra.demo.models.User obj) {
+    public User create(User obj) {
         obj.setId(null);
         obj = this.userRepository.save(obj);
         return obj;
@@ -37,8 +37,8 @@ public class UserService {
 
     @Transactional
     public User update(User obj) {
-        User newObj = findById(obj.getId);
-        newObj.setPassword(obj.getPassword);
+        User newObj = findById(obj.getId());
+        newObj.setPassword(obj.getPassword());
         return this.userRepository.save(newObj);
     }
 
