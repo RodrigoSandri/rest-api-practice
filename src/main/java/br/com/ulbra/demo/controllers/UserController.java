@@ -4,19 +4,17 @@ import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
 
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.ulbra.demo.models.User;
 import br.com.ulbra.demo.services.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/user")
-@Validated
 public class UserController {
 
     @Autowired
@@ -25,11 +23,10 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id) {
         User obj = this.userService.findById(id);
-        return ResponseEntity.ok().body(obj);
+        return ResponseEntity.ok(obj);
     }
 
     @PostMapping
-    @Validated(createUser.class)
     public ResponseEntity<Void> create(@Valid @RequestBody User obj) {
         User newObj = this.userService.create(obj);
 
@@ -43,7 +40,6 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @Validated(update.class)
     public ResponseEntity<Void> update(@Valid @RequestBody User obj, @PathVariable Long id) {
         obj.setId(id);
         this.userService.update(obj);

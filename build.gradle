@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(23)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
@@ -18,8 +18,29 @@ repositories {
 }
 
 dependencies {
+	// WEB
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// JPA (Banco de dados + Hibernate)
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// Validation (@Valid, @NotBlank, @Size)
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// Security (BCryptPasswordEncoder)
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// Dev tools (hot reload)
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// Lombok (remove boilerplate getters/setters)
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// Banco em memória (H2)
+	runtimeOnly 'com.h2database:h2'
+
+	// Testes
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
