@@ -27,9 +27,7 @@ dependencies {
 	// Validation (@Valid, @NotBlank, @Size)
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	// Security (BCryptPasswordEncoder)
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-
+	
 	// Dev tools (hot reload)
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
